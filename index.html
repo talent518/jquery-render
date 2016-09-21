@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh_cn">
+<head>
+	<meta charset="UTF-8">
+	<title>jQuery模板引擎</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.render.js"></script>
+</head>
+<body>
+<script id="tpl-demo" type="text/html">
+{if data.list}
+	<dl>
+	{loop data.list value}
+		<dd style="line-height:20px;"><span>${value.id}</span>. <span>${value.name}</span></dd>
+	{/loop}
+	</dl>
+{/if}
+
+{if data.list2}
+	<ul>
+	{loop data.list2 key value}
+		<li style="line-height:20px;">${value.id}. ${value.name}</li>
+	{/loop}
+	</ul>
+{/if}
+
+	{if data.type == 1}
+		<h1>A</h1>
+	{elseif data.type == 2}
+		<h1>B</h1>
+	{else}
+		<h1>C</h1>
+	{/if}
+
+	{func:name $1, $2}
+		{if $1[$2]}
+			<ul pid="${$2}">
+			{loop $1[$2] $v}
+				<li i="${$v.id}">${$v.name}</li>
+				{call:name data.tree, $v.id}
+			{/loop}
+			</ul>
+		{/if}
+	{/func}
+	{call:name data.tree, 0}
+
+	{%for(var i = 0; i < 100; i++) {%}
+		${i}&nbsp;
+	{%}%}
+</script>
+	<div id="j-demo" style="word-break:break-all;"></div>
+	<script type="text/javascript">
+	$.render.prototype.options.debug = true;
+	$('<pre style="border:1px gray solid;padding:5px;">').attr('title', "模板 tpl-demo 的源码！").text($('#tpl-demo').html()).prependTo(document.body);
+	$('#j-demo').render('tpl-demo', {
+		list:[
+			{id:1,name:'aaa'},
+			{id:2,name:'bbb'}
+		],
+		list2:[
+			{id:3,name:'ccc'},
+			{id:4,name:'ddd'}
+		],
+		type:Math.floor(Math.random()*3),
+		tree:{
+			0:[
+				{id:1,name:'a'},
+				{id:2,name:'b'}
+			],
+			1:[
+				{id:3,name:'aa'}
+			],
+			3:[
+				{id:4,name:'aaa'}
+			]
+		},
+		2:[
+			{
+				id:5,
+				name:'bb'
+			}
+		]
+	});
+	</script>
+</body>
+</html>
