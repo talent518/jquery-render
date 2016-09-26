@@ -99,7 +99,7 @@
 				return '<{' + (codes.length - 1) + '}>';
 			});
 
-			// {{js code}} 或 /*{{js code}}*/
+			// {%js code%} 或 /*{%js code%}*/
 			html = html.replace(/(\/\*)?\{\%(%?!\}|[^%]+)+\%\}(\*\/)?/g, function($0, $1, $2) {
 				codes.push('");\n' + $2 + '\n__stack.push("');
 				return '<{' + (codes.length - 1) + '}>';

@@ -13,7 +13,7 @@ JavaScript版的模板引擎(jquery-render)
   * 变量输出：${var}
   * 函数定义：{func:name $1, $2} {/func}
   * 函数调用：{call:name $1, $2}
-  * 自定义JS：{{js code}} 或 /*{{js code}}*/
+  * 自定义JS：{%js code%} 或 /\*{%js code%}\*/
 
 ## 功能
   * $().render(tpl, data, isReturn, isAppend, options)
