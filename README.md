@@ -8,7 +8,7 @@ JavaScript版的模板引擎(jquery-render)
   * 平台不限
 
 ## 语法
-  * 循环语句：{loop value} ... {/loop} 或 {loop list key value} ... {/loop}
+  * 循环语句：{loop list value} ... {/loop} 或 {loop list key value} ... {/loop}
   * 判断语句：{if exp} ... {else if exp} ... {else} ... {/if}
   * 变量输出：${var}
   * 函数定义：{func:name $1, $2} {/func}

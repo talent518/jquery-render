@@ -55,7 +55,7 @@
 			var codes = [];
 			var k = 0;
 
-			// {loop value} 或 {loop list key value}
+			// {loop list value} 或 {loop list key value}
 			html = $.trim(html).replace(/\s*[\r\n]\s*/g,'').replace(/\{loop\s+([^\s]+)\s+(([^\s\}]+)\s+)?([^\}]+)\}/ig, function($0, $1, $2, $3, $4) {
 				if(typeof($3) === 'undefined' || $3 === '') {
 					$3 = '__key' + (++k);
