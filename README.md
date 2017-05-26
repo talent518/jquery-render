@@ -18,10 +18,15 @@ JavaScript版的模板引擎(jquery-render)
 ## 功能
   * $().render(tpl, data, isReturn, isAppend, options)
     * tpl(string): 模板代码所在的元素ID，如：'tpl-demo'
-    * data(object): 张歆艺渲染模板所需数据，如：{list:[{id:1,name:'a'}],type:1}
+    * data(object): 渲染模板所需数据，如：{list:[{id:1,name:'a'}],type:1}
     * isReturn(boolean): 返回执行结果为HTML
     * isAppend(boolean): 是否附加到最后
     * options(object): 选项，如：{debug:true}
+  * $(tpl).renderHTML(data, options)
+    * tpl(string): 模板代码所在的元素ID，如：'#tpl-demo'
+    * data(object): 渲染模板所需数据，如：{list:[{id:1,name:'a'}],type:1}
+    * options(object): 选项，如：{debug:true}
+    * @return: 返回模板执行结束
   * $.render(options): 必须使用new方式创建对象
   * $.render.parse(tpl): 编译模板ID为tpl的模板，并覆盖$.render.run方法
   * $.render.run: 必须先执行$.render.parse后，方可使用，否则会弹出提醒信息

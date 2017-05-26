@@ -1,6 +1,4 @@
 ;(function($) {
-	var caches = {};
-
 	String.prototype.toJSON = function() {
 		ret = '"';
 		var c;
@@ -140,23 +138,10 @@
 	};
 
 	$.fn.render = function(tpl, data, isReturn, isAppend, options) {
-		var $tpl = $('#' + tpl);
-		if($tpl.size() == 0) {
-			alert('没找到模板“' + tpl + '”！');
-			return false;
-		}else if(caches[tpl]) {
-			r = caches[tpl];
-		} else {
-			var r = new $.render(options);
-			r.tpl = tpl;
-			r.parse($tpl.html());
-			caches[tpl] = r;
-		}
+		var html = $('#tpl-' + tpl).renderHTML(data, options);
 
-		var html = r.run(data);
-
-		if(isReturn) {
-			return isReturn;
+		if(isReturn || !this.size()) {
+			return html;
 		} else if(isAppend) {
 			this.append(html);
 		} else {
@@ -164,5 +149,20 @@
 		}
 
 		return this;
+	};
+
+	$.fn.renderHTML = function(data, options) {
+		if(!this.size()) {
+			alert('没找到模板“' + tpl + '”！');
+			return false;
+		}
+		var r = this.data('render');
+		if(!r) {
+			r = new $.render(options);
+			r.parse(this.html());
+			this.data('render', r);
+		}
+
+		return r.run(data);
 	};
 })(jQuery);
