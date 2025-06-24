@@ -1,46 +1,4 @@
 ;(function($) {
-	String.prototype.toJSON = function() {
-		ret = '"';
-		var c;
-		for (var i = 0; i < this.length; i++) {
-			if (this.charCodeAt(i) > 128) {
-				c = escape(this.charAt(i)).replace('%u', '\\u');
-			} else {
-				switch (this.charAt(i)) {
-				case '\b':
-					c = '\\b';
-					break;
-				case '\f':
-					c = '\\f';
-					break;
-				case '\n':
-					c = '\\n';
-					break;
-				case '\r':
-					c = '\\r';
-					break;
-				case '\t':
-					c = '\\t';
-					break;
-				case '\'':
-					c = '\\\'';
-					break;
-				case '\"':
-					c = '\\\"';
-					break;
-				case '\\':
-					c = '\\\\';
-					break;
-				default:
-					c = this.charAt(i);
-				}
-			}
-			ret += c;
-		}
-		ret += '"';
-		return ret;
-	};
-
 	$.render = function(options) {
 		this.options = $.extend({}, this.options, options);
 	};
@@ -104,7 +62,7 @@
 				return '<{' + (codes.length - 1) + '}>';
 			});
 
-			var js = 'var __stack = [];\n__stack.push(' + html.toJSON() + ');\nreturn __stack.join("");';
+			var js = 'var __stack = [];\n__stack.push(' + JSON.stringify(html) + ');\nreturn __stack.join("");';
 			js = js.replace(/\<\{(\d+)\}\>/g, function($0, $1) {
 				return codes[parseInt($1)];
 			}).replace(/__stack\.push\(""\);\s+/g,'');
@@ -126,7 +84,7 @@
 					}
 				}
 
-				js = lines.join($.browser.msie && $.browser.version <= "7.0" ? '\r\n' : '\n');
+				js = lines.join('\r\n');
 
 				$('<pre style="border:1px gray solid;padding:5px;">').attr('title', "模板 " + this.tpl + " 的编译结果！").text(js).appendTo(document.body);
 			}
@@ -138,9 +96,19 @@
 	};
 
 	$.fn.render = function(tpl, data, isReturn, isAppend, options) {
-		var html = $('#tpl-' + tpl).renderHTML(data, options);
+		var $tpl = $('#tpl-' + tpl);
+		if(!$tpl.length) return this.html('没找到模板！');
 
-		if(isReturn || !this.size()) {
+		var r = $tpl.data('render');
+		if(!r) {
+			r = new $.render(options);
+			r.tpl = tpl;
+			r.parse($tpl.html());
+			$tpl.data('render', r);
+		}
+		var html = r.run(data);
+
+		if(isReturn || !this.length) {
 			return html;
 		} else if(isAppend) {
 			this.append(html);
@@ -149,20 +117,5 @@
 		}
 
 		return this;
-	};
-
-	$.fn.renderHTML = function(data, options) {
-		if(!this.size()) {
-			alert('没找到模板“' + tpl + '”！');
-			return false;
-		}
-		var r = this.data('render');
-		if(!r) {
-			r = new $.render(options);
-			r.parse(this.html());
-			this.data('render', r);
-		}
-
-		return r.run(data);
 	};
 })(jQuery);
